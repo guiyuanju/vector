@@ -20,7 +20,7 @@ typedef struct {
     } \
     (vector)[vlen(vector)] = (value); \
     vheader(vector)->len++; \
-} while(0);
+} while(0)
 
 void* vec_new(size_t len, size_t cap, size_t size);
 void* vec_grow(void* vector);
