@@ -3,12 +3,12 @@ A vector library for C.
 
 ```c
     // new int vector with length 4
-    Vec* vec = vnew(4, int);
+    int* vec = vnew(int, 4);
     printf("len = %zu, cap = %zu\n", vlen(vec), vcap(vec));
 
-    // set value with `varr(vector, type)[index] = value`
+    // set value with array syntax
     for (size_t i = 0; i < vlen(vec); i++) {
-        varr(vec, int)[i] = i;
+        vec[i] = i;
         printf("len = %zu, cap = %zu\n", vlen(vec), vcap(vec));
     }
 
@@ -18,8 +18,10 @@ A vector library for C.
         printf("len = %zu, cap = %zu\n", vlen(vec), vcap(vec));
     }
 
-    // access a value with `varr(vector, type)[index]`
+    // access a value array syntax
     for (size_t i = 0; i < vlen(vec); i++) {
-        printf("%d ", varr(vec, int)[i]);
+        printf("%d ", vec[i]);
     }
+
+    vfree(vec);
 ```
