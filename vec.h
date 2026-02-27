@@ -13,7 +13,7 @@ typedef struct {
 #define vfree(vector) vec_free(vector)
 #define vlen(vector) vec_len(vector)
 #define vcap(vector) vec_cap(vector)
-#define vadd(vector, type, value) do { \
+#define vadd(vector, value) do { \
     if (vlen(vector) + 1 > vcap(vector)) { \
         vector = vec_grow(vector); \
     } \

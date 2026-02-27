@@ -11,7 +11,7 @@ A vector library for C.
     }
 
     for (size_t i = vlen(vec); i < 10; i++) {
-        vadd(vec, int, i);
+        vadd(vec, i);
     }
 
     for (size_t i = 0; i < vlen(vec); i++) {
