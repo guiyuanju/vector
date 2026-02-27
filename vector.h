@@ -14,7 +14,7 @@ typedef struct {
 #define vcap(vector) vector_cap(vector)
 #define varr(vector, type) ((type*)(vector+1))
 #define vadd(vector, type, value) do { \
-    if (vector->len + 1 > vector->cap) { \
+    if (vlen(vector) + 1 > vcap(vector)) { \
         vector = vector_grow(vector); \
     } \
     varr(vector, type)[vector->len] = value; \
