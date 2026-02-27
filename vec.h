@@ -10,11 +10,15 @@ typedef struct {
 } Vec;
 
 #define vnew(type, len) vec_new(len, len, sizeof(type)) 
+#define vnew2(type, len, cap) vec_new(len, cap, sizeof(type)) 
 #define vheader(vector) ((Vec*)(vector)-1)
 #define vfree(vector) (free(vheader(vector)))
 #define vlen(vector) (vheader(vector)->len)
 #define vcap(vector) (vheader(vector)->cap)
 #define vadd(vector, value) do { \
+    if ((vector) == NULL) { \
+        vector = vec_new(0, 4, sizeof(*vector)); \
+    } \
     if (vlen(vector) + 1 > vcap(vector)) { \
         vector = vec_grow(vector); \
     } \
@@ -37,14 +41,13 @@ void* vec_new(size_t len, size_t cap, size_t size) {
 
 void* vec_grow(void* vector) {
     Vec* header = vheader(vector);
-    size_t new_cap = 8;
-    if (header->cap >= new_cap) {
-        new_cap = header->cap + header->cap/2;
+    if (header->cap >= 8) {
+        header->cap += header->cap/2;
+    } else {
+        header->cap = 8;
     }
-    void* new_vector = vec_new(header->len, new_cap, header->size);
-    memcpy(new_vector, vector, header->len*header->size);
-    vfree(vector);
-    return new_vector;
+    header = realloc(header, header->cap * header->size + sizeof(Vec));
+    return (void*)(header+1);
 }
 
 #endif
