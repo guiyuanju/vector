@@ -3,7 +3,7 @@ A vector library for C.
 
 ```c
     // new int vector with length 4
-    Vector* vec = vnew(4, int);
+    Vec* vec = vnew(4, int);
     printf("len = %zu, cap = %zu\n", vlen(vec), vcap(vec));
 
     // set value with `varr(vector, type)[index] = value`
