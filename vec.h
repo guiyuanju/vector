@@ -2,16 +2,19 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stddef.h>
+#include <stdalign.h>
 
 typedef struct {
     size_t len;
     size_t cap;
     size_t size; // size of an element
+    alignas(max_align_t) char data[]; // flexible array member, properly aligned
 } Vec;
 
 #define vnew(type, len) vec_new(len, len, sizeof(type)) 
 #define vnew2(type, len, cap) vec_new(len, cap, sizeof(type)) 
-#define vheader(vector) ((Vec*)(vector)-1)
+#define vheader(vector) ((Vec*)((char*)(vector) - offsetof(Vec, data)))
 #define vfree(vector) (free(vheader(vector)))
 #define vlen(vector) (vheader(vector)->len)
 #define vcap(vector) (vheader(vector)->cap)
@@ -32,11 +35,11 @@ void* vec_grow(void* vector);
 #ifdef VECTOR_IMPL
 
 void* vec_new(size_t len, size_t cap, size_t size) {
-    Vec* vector = (Vec*)malloc(size*cap+sizeof(Vec));
+    Vec* vector = (Vec*)malloc(offsetof(Vec, data) + size*cap);
     vector->len = len;
     vector->cap = cap;
     vector->size = size;
-    return (void*)(vector+1);
+    return (void*)(vector->data);
 }
 
 void* vec_grow(void* vector) {
@@ -46,8 +49,8 @@ void* vec_grow(void* vector) {
     } else {
         header->cap = 8;
     }
-    header = realloc(header, header->cap * header->size + sizeof(Vec));
-    return (void*)(header+1);
+    header = realloc(header, offsetof(Vec, data) + header->cap * header->size);
+    return (void*)(header->data);
 }
 
 #endif
