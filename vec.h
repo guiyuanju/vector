@@ -18,7 +18,7 @@ typedef struct {
     if (vlen(vector) + 1 > vcap(vector)) { \
         vector = vec_grow(vector); \
     } \
-    vector[vlen(vector)] = value; \
+    (vector)[vlen(vector)] = value; \
     vheader(vector)->len++; \
 } while(0);
 
